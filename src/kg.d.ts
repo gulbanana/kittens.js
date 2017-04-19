@@ -1,7 +1,7 @@
 declare namespace game {
     namespace bld {
         function get(building: string): any;
-        function getPrices(building: string): any;
+        function getPrices(building: string): Price[];
     }
 
     namespace console {
@@ -42,7 +42,18 @@ declare namespace game {
     namespace workshop {
         function craft(resource: string, amount: number): void;
         function craftAll(resource: string): void;
+        function getCraft(resource: string): Craft;
+        function getCraftPrice(craft: Craft): Price[];
     }
 
     interface Race {}
+
+    interface Craft {
+        prices: Price[];
+    }
+
+    interface Price {
+        name: string;
+        val: number;
+    }
 }

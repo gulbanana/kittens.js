@@ -19,6 +19,7 @@ namespace bot {
         onAffordBuy("lumberMill");
         onAffordBuy("smelter");
         onAffordBuy("quarry");
+        onAffordBuy("oilWell");
 
         // food
         onAffordBuy("pasture");
@@ -34,6 +35,9 @@ namespace bot {
         // culture
         onAffordBuy("tradepost");
         onAffordBuy("amphitheatre");
+        onAffordBuy("temple");
+        onAffordBuy("chapel");
+        onAffordBuy("ziggurat");
 
         // storage
         onAffordBuy("barn");
@@ -57,7 +61,7 @@ namespace bot {
         onCapCraft("uranium", "thorium", 250);
         onCapCraft("coal", "steel", 100, () => game.resPool.resourceMap["iron"].value >= game.resPool.resourceMap["coal"].value);
         onCapCraft("unobtainium", "eludium", 1000, (c) => {
-            let d = price(c, 2500);
+            let d = price(c, 1000) * 2500;
             if (game.resPool.resourceMap["alloy"].value >= d) {
                 return true;
             } else {
@@ -72,7 +76,7 @@ namespace bot {
 
         // move papercrafts along the culture/science tree
         onCapCraft("culture", "manuscript", 400, (c) => {
-            let d = price(c, 25);
+            let d = price(c, 400) * 25;
             if (game.resPool.resourceMap["parchment"].value >= d) {
                 return true;
             } else {
@@ -80,12 +84,23 @@ namespace bot {
                 return false;
             }
         });
+        onCapCraft("science", "compedium", 10000, (c) => {
+            let d = price(c, 10000) * 50;
+            if (game.resPool.resourceMap["manuscript"].value >= d) {
+                return true;
+            } else {
+                addDemand("manuscript", d);
+                return false;
+            }
+        });
 
         /*****************************************/
         /* 3: convert crafted resources up tiers */
         /*****************************************/
-        onDemandCraft("scaffold");
         onDemandCraft("parchment");
+        onDemandCraft("scaffold");
+        onDemandCraft("megalith");
+        onDemandCraft("gear");
         onDemandCraft("alloy");
     }
 }
