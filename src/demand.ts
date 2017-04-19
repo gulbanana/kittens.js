@@ -11,6 +11,7 @@ namespace bot {
 
     export function onDemandCraft(resource: string) {
         let d = demand[resource]||0;
+
         if (d > 0) {
             let craft = game.workshop.getCraft(resource);
             let prices = game.workshop.getCraftPrice(craft);

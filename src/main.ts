@@ -20,6 +20,7 @@ namespace bot {
         onAffordBuy("smelter");
         onAffordBuy("quarry");
         onAffordBuy("oilWell");
+        onAffordBuy("accelerator");
 
         // food
         onAffordBuy("pasture");
@@ -37,12 +38,19 @@ namespace bot {
         onAffordBuy("amphitheatre");
         onAffordBuy("temple");
         onAffordBuy("chapel");
-        onAffordBuy("ziggurat");
 
         // storage
         onAffordBuy("barn");
         onAffordBuy("warehouse");
         onAffordBuy("harbor");
+
+        // blueprint eaters
+        onAffordBuy("steamworks");
+        onAffordBuy("magneto");
+        onAffordBuy("reactor");
+        onAffordBuy("factory");
+        onAffordBuy("calciner");
+        onAffordBuy("ziggurat");
 
         /***********************************************/
         /* 2: consume capped resources in various ways */
@@ -102,6 +110,7 @@ namespace bot {
         onDemandCraft("megalith");
         onDemandCraft("gear");
         onDemandCraft("alloy");
+        onDemandCraft("concrete");
     }
 }
 

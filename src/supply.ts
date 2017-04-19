@@ -21,20 +21,21 @@ namespace bot {
                     addDemand(p.name, p.val);
                     return;
                 }
-
-                // building purchases are ui driven using dojo MVC - we have to find the button controller and call a method on it
-                for (let button of game.tabs[0].buttons) {
-                    if (typeof button.model.metadata != 'undefined' &&
-                        button.model.metadata.name == bld) {
-                        button.controller.build(button.model, 1);
-                        button.update();
-                        return;
-                    }
-                }
-
-                console.log("can't find button for building " + bld);
-                console.log(b);
             }
+
+            // building purchases are ui driven using dojo MVC - we have to find the button controller and call a method on it
+            for (let button of game.tabs[0].buttons) {
+                if (typeof button.model.metadata != 'undefined' &&
+                    button.model.metadata.name == bld) {
+                    button.controller.build(button.model, 1);
+                    button.update();
+                    return;
+                }
+            }
+
+            console.log("can't find button for building " + bld);
+            console.log(b);
+            
         }
     }
 

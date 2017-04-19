@@ -1,6 +1,6 @@
 declare namespace game {
     namespace bld {
-        function get(building: string): any;
+        function get(building: string): Building;
         function getPrices(building: string): Price[];
     }
 
@@ -46,14 +46,18 @@ declare namespace game {
         function getCraftPrice(craft: Craft): Price[];
     }
 
-    interface Race {}
+    interface Price {
+        name: string;
+        val: number;
+    }
+
+    interface Building {
+        unlocked: boolean
+    }
 
     interface Craft {
         prices: Price[];
     }
 
-    interface Price {
-        name: string;
-        val: number;
-    }
+    interface Race {}
 }
