@@ -86,7 +86,7 @@ namespace bot {
         onDemandCraft("megalith");
         onDemandCraft("gear");
         onDemandCraft("alloy");
-        onDemandCraft("concrete");
+        onDemandCraft("concrate");
     }
 }
 
