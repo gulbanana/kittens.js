@@ -13,7 +13,7 @@ namespace bot {
             for (let p of game.bld.getPrices(bld)) {
                 let res = game.resPool.resourceMap[p.name];
 
-                if (res.value > res.maxValue && res.maxValue != 0) { // post-reset or something
+                if (res.maxValue != 0 && res.value > res.maxValue && res.value - res.maxValue > res.maxValue * 0.1) { // post-reset or something
                     return;
                 }
 
@@ -41,7 +41,11 @@ namespace bot {
     export function onCap(res: string, f: (c: number) => void, test = ((_: number) => true)) {
         let r = game.resPool.resourceMap[res];
 
-        if (!r.unlocked || Math.floor(r.value) > Math.floor(r.maxValue)) {
+        if (!r.unlocked) {
+            return;
+        }
+
+        if (Math.floor(r.value) > Math.floor(r.maxValue) && r.value - r.maxValue > r.maxValue * 0.1) {
             return;
         }
         
