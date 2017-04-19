@@ -36,7 +36,7 @@ declare namespace game {
     }
 
     namespace village {
-        function huntMultiple(amount: number);
+        function huntMultiple(amount: number): void;
     }
 
     namespace workshop {
