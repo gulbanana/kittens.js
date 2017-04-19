@@ -68,39 +68,15 @@ namespace bot {
         onCapCraft("oil", "kerosene", 7500);
         onCapCraft("uranium", "thorium", 250);
         onCapCraft("coal", "steel", 100, () => game.resPool.resourceMap["iron"].value >= game.resPool.resourceMap["coal"].value);
-        onCapCraft("unobtainium", "eludium", 1000, (c) => {
-            let d = price(c, 1000) * 2500;
-            if (game.resPool.resourceMap["alloy"].value >= d) {
-                return true;
-            } else {
-                addDemand("alloy", d);
-                return false;
-            }
-        });
+        onCapCraftOrDemand("unobtainium", "eludium", "alloy", 1000, 2500);
 
         // pray and hunt
         onCap("faith", () => game.religion.praise());
         onCap("manpower", (c) => game.village.huntMultiple(price(c, 100)));
 
         // move papercrafts along the culture/science tree
-        onCapCraft("culture", "manuscript", 400, (c) => {
-            let d = price(c, 400) * 25;
-            if (game.resPool.resourceMap["parchment"].value >= d) {
-                return true;
-            } else {
-                addDemand("parchment", d);
-                return false;
-            }
-        });
-        onCapCraft("science", "compedium", 10000, (c) => {
-            let d = price(c, 10000) * 50;
-            if (game.resPool.resourceMap["manuscript"].value >= d) {
-                return true;
-            } else {
-                addDemand("manuscript", d);
-                return false;
-            }
-        });
+        onCapCraftOrDemand("culture", "manuscript", "parchment", 400, 25);
+        onCapCraftOrDemand("science", "compedium", "manuscript", 10000, 50);
 
         /*****************************************/
         /* 3: convert crafted resources up tiers */

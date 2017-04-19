@@ -23,4 +23,16 @@ namespace bot {
             game.workshop.craft(resource, d);
         }
     }
+
+    export function onCapCraftOrDemand(resource: string, craft: string, demand: string, craftPrice: number, demandPrice: number) {
+        onCapCraft(resource, craft, craftPrice, (c) => {
+            let d = price(c, craftPrice) * demandPrice;
+            if (game.resPool.resourceMap[demand].value >= d) {
+                return true;
+            } else {
+                addDemand(demand, d);
+                return false;
+            }
+        });
+    }
 }
