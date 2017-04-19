@@ -12,9 +12,13 @@ namespace bot {
         if (b.unlocked) {
             for (let p of game.bld.getPrices(bld)) {
                 let res = game.resPool.resourceMap[p.name];
-                if ((res.value > res.maxValue && res.maxValue != 0) || // post-reset or something
-                    game.resPool.resourceMap[p.name].value < p.val) {
-                    //console.log("not building due to " + res);
+
+                if (res.value > res.maxValue && res.maxValue != 0) { // post-reset or something
+                    return;
+                }
+
+                if (game.resPool.resourceMap[p.name].value < p.val) { // can't afford it
+                    addDemand(p.name, p.val);
                     return;
                 }
 
@@ -34,7 +38,7 @@ namespace bot {
         }
     }
 
-    export function onCap(res: string, f: (c: number) => void, test = (() => true)) {
+    export function onCap(res: string, f: (c: number) => void, test = ((_: number) => true)) {
         let r = game.resPool.resourceMap[res];
 
         if (!r.unlocked || Math.floor(r.value) > Math.floor(r.maxValue)) {
@@ -43,7 +47,7 @@ namespace bot {
         
         let th = r.maxValue * capThresh;
         let fallback = 10;
-        while (r.value > th && test()) {
+        while (r.value > th && test(r.value - th)) {
             //console.log(`${res} spending ${r.value - th}`);
             f(r.value - th);
             if (fallback-- <= 0) {
@@ -53,7 +57,7 @@ namespace bot {
         }
     };
 
-    export function onCapCraft(res: string, toRes: string, cost: number, f = (() => true)) {
+    export function onCapCraft(res: string, toRes: string, cost: number, f = ((_: number) => true)) {
         if (!game.resPool.resourceMap[toRes].unlocked) {
             return;
         }

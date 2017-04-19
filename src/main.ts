@@ -1,10 +1,11 @@
 namespace bot {
     export function main() {   
+        resetDemand();
+
         /*************************************************************/
         /* 1: build when buildings are affordable, in priority order */
         /*************************************************************/
-
-        // kittens
+        // population
         onAffordBuy("logHouse");
         onAffordBuy("hut");
         onAffordBuy("mansion");
@@ -17,6 +18,7 @@ namespace bot {
         onAffordBuy("mine");
         onAffordBuy("lumberMill");
         onAffordBuy("smelter");
+        onAffordBuy("quarry");
 
         // food
         onAffordBuy("pasture");
@@ -26,6 +28,8 @@ namespace bot {
         // science
         onAffordBuy("academy");
         onAffordBuy("library");
+        onAffordBuy("observatory");
+        onAffordBuy("biolab");
 
         // culture
         onAffordBuy("tradepost");
@@ -34,11 +38,11 @@ namespace bot {
         // storage
         onAffordBuy("barn");
         onAffordBuy("warehouse");
+        onAffordBuy("harbor");
 
         /***********************************************/
         /* 2: consume capped resources in various ways */
         /***********************************************/
-
         // trade if we can
         onCap("gold", (c) => game.diplomacy.tradeMultiple(game.diplomacy.races[4], Math.min(price(c, 15), price(game.resPool.resourceMap["manpower"].value, 50))),
                     () => (game.resPool.resourceMap["iron"].value <= game.resPool.resourceMap["iron"].maxValue * capThresh || 
@@ -52,22 +56,37 @@ namespace bot {
         onCapCraft("oil", "kerosene", 7500);
         onCapCraft("uranium", "thorium", 250);
         onCapCraft("coal", "steel", 100, () => game.resPool.resourceMap["iron"].value >= game.resPool.resourceMap["coal"].value);
-        onCapCraft("unobtainium", "eludium", 1000, () => {
-            if (game.resPool.resourceMap["alloy"].value < 2500) {
-                game.workshop.craftAll("alloy");
+        onCapCraft("unobtainium", "eludium", 1000, (c) => {
+            let d = price(c, 2500);
+            if (game.resPool.resourceMap["alloy"].value >= d) {
+                return true;
+            } else {
+                addDemand("alloy", d);
+                return false;
             }
-            return game.resPool.resourceMap["alloy"].value >= 2500;
         });
 
         // pray and hunt
         onCap("faith", () => game.religion.praise());
         onCap("manpower", (c) => game.village.huntMultiple(price(c, 100)));
 
-        // move crafts up the culture/science tree
-        onCap("culture", (_) => game.workshop.craft("manuscript", 1), () => {
-            game.workshop.craftAll("parchment");
-            return game.resPool.resourceMap["parchment"].value >= 2525;
+        // move papercrafts along the culture/science tree
+        onCapCraft("culture", "manuscript", 400, (c) => {
+            let d = price(c, 25);
+            if (game.resPool.resourceMap["parchment"].value >= d) {
+                return true;
+            } else {
+                addDemand("parchment", d);
+                return false;
+            }
         });
+
+        /*****************************************/
+        /* 3: convert crafted resources up tiers */
+        /*****************************************/
+        onDemandCraft("scaffold");
+        onDemandCraft("parchment");
+        onDemandCraft("alloy");
     }
 }
 
