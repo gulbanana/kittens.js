@@ -18,11 +18,7 @@ declare namespace game {
     }
 
     namespace resPool {
-        const resourceMap: { [index:string]: {
-            value: number,
-            maxValue: number,
-            unlocked: true
-        } }
+        const resourceMap: { [index:string]: Resource }
     }
 
     namespace religion {
@@ -53,6 +49,13 @@ declare namespace game {
 
     interface Building {
         unlocked: boolean
+    }
+
+    interface Resource {
+        value: number,
+        maxValue: number,
+        unlocked: boolean,
+        craftable: boolean
     }
 
     interface Craft {

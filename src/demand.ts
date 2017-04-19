@@ -1,18 +1,35 @@
 namespace bot {
-    let demand: { [index:string]: number | undefined } = {};
+    let demand: { [index:string]: number | boolean | undefined } = {};
 
-    export function resetDemand() {
-        demand = {};
+    export function resetDemand() {        
+        for (let key in demand) {
+            if (demand.hasOwnProperty(key)) {
+                if (typeof demand[key] == 'boolean') {
+                    //console.log(`${key} demand: ${demand[key]}`);
+
+                    if (demand[key]) {
+                        demand[key] = false;
+                    } else {
+                        demand[key] = undefined;
+                    }
+                }
+            }
+        }
     }
 
     export function addDemand(resource: string, amount: number) {
-        demand[resource] = Math.max(demand[resource]||0, amount);
+        let d = demand[resource];
+        if (typeof d == 'undefined') {
+            demand[resource] = amount;
+        } else if (typeof d == 'number') {
+            demand[resource] = Math.max(d, amount);
+        }
     }
 
     export function onDemandCraft(resource: string) {
-        let d = demand[resource]||0;
+        let d = demand[resource];
 
-        if (d > 0) {
+        if (typeof d == 'number' && d > 0) {
             let craft = game.workshop.getCraft(resource);
             let prices = game.workshop.getCraftPrice(craft);
             for (let p of prices) {
@@ -20,7 +37,12 @@ namespace bot {
                 d = Math.min(d, r.value / p.val);
             }
 
-            game.workshop.craft(resource, d);
+            if (d > 0) {
+                //console.log(`crafting ${d} ${resource} to meet demand`);
+
+                game.workshop.craft(resource, d);
+                demand[resource] = true;
+            }
         }
     }
 
