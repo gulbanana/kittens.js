@@ -6,39 +6,6 @@ namespace bot {
         return Math.max(Math.floor(x/cost), 1);
     }
 
-    export function onAffordBuy(bld: string) {
-        let b = game.bld.get(bld);
-
-        if (b.unlocked) {
-            for (let p of game.bld.getPrices(bld)) {
-                let res = game.resPool.resourceMap[p.name];
-
-                if (res.maxValue != 0 && res.value > res.maxValue && res.value - res.maxValue > res.maxValue * 0.1) { // post-reset or something
-                    return;
-                }
-
-                if (game.resPool.resourceMap[p.name].value < p.val) { // can't afford it
-                    addDemand(p.name, p.val);
-                    return;
-                }
-            }
-
-            // building purchases are ui driven using dojo MVC - we have to find the button controller and call a method on it
-            for (let button of game.tabs[0].buttons) {
-                if (typeof button.model.metadata != 'undefined' &&
-                    button.model.metadata.name == bld) {
-                    button.controller.build(button.model, 1);
-                    button.update();
-                    return;
-                }
-            }
-
-            console.log("can't find button for building " + bld);
-            console.log(b);
-            
-        }
-    }
-
     export function onCap(res: string, f: (c: number) => void, test = ((_: number) => true)) {
         let r = game.resPool.resourceMap[res];
 
@@ -69,4 +36,17 @@ namespace bot {
 
         onCap(res, (c) => game.workshop.craft(toRes, price(c, cost)), f);
     };
+
+    
+    export function onCapCraftOrDemand(resource: string, craft: string, demand: string, craftPrice: number, demandPrice: number) {
+        onCapCraft(resource, craft, craftPrice, (c) => {
+            let d = price(c, craftPrice) * demandPrice;
+            if (game.resPool.resourceMap[demand].value >= d) {
+                return true;
+            } else {
+                addDemand(demand, d);
+                return false;
+            }
+        });
+    }
 }

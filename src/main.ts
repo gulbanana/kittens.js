@@ -52,6 +52,12 @@ namespace bot {
         onAffordBuy("calciner");
         onAffordBuy("ziggurat");
 
+        if (game.spaceTab.visible) {
+            onAffordBuy("researchVessel", "piscine");
+            onAffordBuy("satellite", "cath");
+            onAffordBuy("lunarOutpost", "moon");
+        }
+
         /***********************************************/
         /* 2: consume capped resources in various ways */
         /***********************************************/

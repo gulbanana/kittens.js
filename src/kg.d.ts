@@ -25,7 +25,9 @@ declare namespace game {
         function praise(): void;
     }
 
-    const tabs: any[];
+    const spaceTab: SpaceTab;
+
+    const tabs: Tab[];
 
     namespace ui {
         function renderFilters(): void;
@@ -48,7 +50,9 @@ declare namespace game {
     }
 
     interface Building {
-        unlocked: boolean
+        unlocked: boolean,
+        name: string,
+        label: string,
     }
 
     interface Resource {
@@ -63,4 +67,39 @@ declare namespace game {
     }
 
     interface Race {}
+
+    interface Tab {
+        visible: boolean,
+        buttons: Button[],
+    }
+
+    interface Button {
+        update: () => void;
+        model: ButtonModel;
+        controller: ButtonController;
+    }
+
+    interface ButtonModel {
+        metadata: {
+            name: string;
+        }
+    }
+
+    interface ButtonController {
+        build: (model: ButtonModel, amount: number) => void;
+        getPrices: (model: ButtonModel) => Price[];
+    }
+
+    interface SpaceTab extends Tab {
+        planetPanels: {
+            children: Button[]
+            planet: Planet
+        }[]
+    }
+
+    interface Planet {
+        name: string;
+        reached: boolean;
+        buildings: Building[];
+    }
 }
