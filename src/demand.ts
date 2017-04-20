@@ -1,4 +1,6 @@
 namespace bot {
+    const satisfyThresh = 0.2;
+
     let demand: { [index:string]: number | boolean | undefined } = {};
 
     export function resetDemand() {        
@@ -30,14 +32,20 @@ namespace bot {
         let d = demand[resource];
 
         if (typeof d == 'number' && d > 0) {
+            let totalD = d;
+
             let craft = game.workshop.getCraft(resource);
             let prices = game.workshop.getCraftPrice(craft);
+            let anyRequirementsInDemand = false;
             for (let p of prices) {
                 let r = game.resPool.resourceMap[p.name];
                 d = Math.min(d, r.value / p.val);
+                if (typeof demand[p.name] != 'undefined') {
+                    anyRequirementsInDemand = true;
+                }
             }
 
-            if (d > 0) {
+            if (!anyRequirementsInDemand || d > satisfyThresh * totalD) { // otherwise we're just wasting time
                 //console.log(`crafting ${d} ${resource} to meet demand`);
 
                 game.workshop.craft(resource, d);
