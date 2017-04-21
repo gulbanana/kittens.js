@@ -5,7 +5,7 @@ namespace bot {
         /*************************************************************/
         /* 1: build when buildings are affordable, in priority order */
         /*************************************************************/
-        // population
+        // housing
         onAffordBuy("logHouse");
         onAffordBuy("hut");
         onAffordBuy("mansion");
@@ -53,9 +53,22 @@ namespace bot {
         onAffordBuy("ziggurat");
 
         if (game.spaceTab.visible) {
+            // starcharts
             onAffordBuy("researchVessel", "piscine");
-            onAffordBuy("satellite", "cath");
-            onAffordBuy("lunarOutpost", "moon");
+            onAffordBuy("sattelite", "cath");
+
+            // space production
+            onAffordBuy("moonOutpost", "moon");
+            onAffordBuy("planetCracker", "dune");
+            onAffordBuy("hydrofracturer", "dune");
+            onAffordBuy("spaceElevator", "cath");
+            onAffordBuy("spiceRefinery", "dune");
+
+            // space housing (deprioritised because it doesn't speed things up as much at this stage of the game)
+            onAffordBuy("spaceStation", "cath");
+            
+            // space storage
+            onAffordBuy("moonBase", "moon");
         }
 
         /***********************************************/
