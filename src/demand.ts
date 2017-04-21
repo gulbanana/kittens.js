@@ -55,7 +55,7 @@ namespace bot {
 
             for (let d of demands) {
                 if (supply >= d) {
-                    //console.log("not available at " + d);
+                    //console.log("available at " + d);
                     game.workshop.craft(resource, d);
                     demand[resource] = true;
                     return;

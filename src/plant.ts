@@ -76,8 +76,9 @@ namespace bot {
                     return;
                 }
 
-                if (game.resPool.resourceMap[price.name].value < price.val) { // can't afford it
-                    addDemand(price.name, price.val - game.resPool.resourceMap[price.name].value);
+                if (res.value < price.val) { // can't afford it
+                    //console.log(`${building} needs ${price.val} ${price.name} but ${res.value} is available`)
+                    addDemand(price.name, price.val - res.value);
                     return;
                 }
             }

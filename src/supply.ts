@@ -44,7 +44,7 @@ namespace bot {
             if (game.resPool.resourceMap[demand].value >= d) {
                 return true;
             } else {
-                addDemand(demand, d);
+                addDemand(demand, d - game.resPool.resourceMap[demand].value);
                 return false;
             }
         });
